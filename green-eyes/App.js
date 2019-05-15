@@ -1,105 +1,30 @@
-import React, { Component } from 'react';
-import {
-	ActivityIndicator,
-	Button,
-	Clipboard,
-	Image,
-	Share,
-	StatusBar,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View,
-} from 'react-native';
+import React from 'react';
+import { View, Text, Image, Button } from 'react-native';
 import { Constants, ImagePicker, Permissions } from 'expo';
 
-export default class App extends Component {
+export default class App extends React.Component {
 	state = {
-		image: null,
-		uploading: false,
+		photo: null,
 	};
 
-	render() {
-		let { image } = this.state;
-
-		return (
-			<View style={styles.container}>
-				<StatusBar barStyle="default" />
-
-				<Text style={styles.exampleText}>Example: Upload ImagePicker result</Text>
-
-				<Button onPress={this._pickImage} title="Pick an image from camera roll" />
-
-				<Button onPress={this._takePhoto} title="Take a photo" />
-
-				{this._maybeRenderImage()}
-				{this._maybeRenderUploadingOverlay()}
-
-				<Button title="Upload" onPress={this.handleUpload} />
-			</View>
-		);
-	}
-
-	_maybeRenderUploadingOverlay = () => {
-		if (this.state.uploading) {
-			return (
-				<View style={[StyleSheet.absoluteFill, styles.maybeRenderUploading]}>
-					<ActivityIndicator color="#fff" size="large" />
-				</View>
-			);
-		}
-	};
-
-	_maybeRenderImage = () => {
-		let { image } = this.state;
-
-		if (!image) {
-			return;
-		}
-
-		return (
-			<View style={styles.maybeRenderContainer}>
-				<View style={styles.maybeRenderImageContainer}>
-					<Image source={{ uri: image }} style={styles.maybeRenderImage} />
-				</View>
-
-				<Text onPress={this._copyToClipboard} onLongPress={this._share} style={styles.maybeRenderImageText}>
-					{image}
-				</Text>
-			</View>
-		);
-	};
-
-	_share = () => {
-		Share.share({
-			message: this.state.image,
-			title: 'Check out this photo',
-			url: this.state.image,
-		});
-	};
-
-	_copyToClipboard = () => {
-		Clipboard.setString(this.state.image);
-		alert('Copied image URL to clipboard');
-	};
-
-	_takePhoto = async () => {
-		const { status: cameraPerm } = await Permissions.askAsync(Permissions.CAMERA);
-
-		const { status: cameraRollPerm } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-
-		// only if user allows permission to camera AND camera roll
-		if (cameraPerm === 'granted' && cameraRollPerm === 'granted') {
-			let pickerResult = await ImagePicker.launchCameraAsync({
-				allowsEditing: true,
-				aspect: [4, 3],
+	handleUpload = () => {
+		fetch('http://localhost:3000/api/upload', {
+			method: 'POST',
+			body: createFormData(this.state.photo),
+		})
+			.then(response => response.json())
+			.then(response => {
+				console.log('upload succes', response);
+				alert('Upload success!');
+				this.setState({ photo: null });
+			})
+			.catch(error => {
+				console.log('upload error', error);
+				alert('Upload failed!');
 			});
-
-			this._handleImagePicked(pickerResult);
-		}
 	};
 
-	_pickImage = async () => {
+	handleChoosePhoto = async () => {
 		const { status: cameraRollPerm } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
 		// only if user allows permission to camera roll
@@ -108,149 +33,58 @@ export default class App extends Component {
 				allowsEditing: true,
 				aspect: [4, 3],
 			});
-
-			this._handleImagePicked(pickerResult);
-		}
-	};
-
-	_handleImagePicked = async pickerResult => {
-		let uploadResponse, uploadResult;
-
-		try {
-			this.setState({
-				uploading: true,
-			});
-
-			if (!pickerResult.cancelled) {
-				uploadResponse = await uploadImageAsync(pickerResult.uri);
-				uploadResult = await uploadResponse.json();
-
-				this.setState({
-					image: uploadResult.location,
-				});
+			if (pickerResult.uri) {
+				this.setState({ photo: pickerResult });
 			}
-		} catch (e) {
-			console.log({ uploadResponse });
-			console.log({ uploadResult });
-			console.log({ e });
-			alert('Upload failed, sorry :(');
-		} finally {
-			this.setState({
-				uploading: false,
-			});
 		}
 	};
+
+	render() {
+		const { photo } = this.state;
+		return (
+			<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+				{photo && (
+					<React.Fragment>
+						<Image source={{ uri: photo.uri }} style={{ width: 300, height: 300 }} />
+						<Button title="Upload" onPress={this.handleUpload} />
+					</React.Fragment>
+				)}
+				<Button title="Choose Photo" onPress={this.handleChoosePhoto} />
+			</View>
+		);
+	}
 }
 
-async function uploadImageAsync(uri) {
-	let apiUrl = 'https://file-upload-example-backend-dkhqoilqqn.now.sh/upload';
+const createFormData = photo => {
+	// const data = new FormData();
 
-	// Note:
-	// Uncomment this if you want to experiment with local server
-	//
-	// if (Constants.isDevice) {
-	//   apiUrl = `https://your-ngrok-subdomain.ngrok.io/upload`;
-	// } else {
-	//   apiUrl = `http://localhost:3000/upload`
-	// }
+	// data.append('photo', {
+	// 	name: photo.fileName,
+	// 	type: photo.type,
+	// 	uri: Platform.OS === 'android' ? photo.uri : photo.uri.replace('file://', ''),
+	// });
 
-	let uriParts = uri.split('.');
+	let uriParts = photo.uri.split('.');
 	let fileType = uriParts[uriParts.length - 1];
 
 	let formData = new FormData();
 	formData.append('photo', {
-		uri,
-		name: `photo.${fileType}`,
-		type: `image/${fileType}`,
-	});
-
-	let options = {
-		method: 'POST',
-		body: formData,
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'multipart/form-data',
-		},
-	};
-
-	return fetch(apiUrl, options);
-}
-
-/* from tutorial with formik */
-const createFormData = (photo, body) => {
-	const data = new FormData();
-
-	data.append('photo', {
 		name: photo.fileName,
-		type: photo.type,
-		uri: Platform.OS === 'android' ? photo.uri : photo.uri.replace('file://', ''),
+		type: fileType,
+		uri: photo.uri,
 	});
 
-	Object.keys(body).forEach(key => {
-		data.append(key, body[key]);
-	});
+	// let options = {
+	// 	method: 'POST',
+	// 	body: formData,
+	// 	headers: {
+	// 		Accept: 'application/json',
+	// 		'Content-Type': 'multipart/form-data',
+	// 	},
+	// };
 
-	return data;
+	// return fetch(apiUrl, options);
+
+	// return data;
+	return formData;
 };
-
-handleUploadPhoto = () => {
-	fetch('http://localhost:3000/api/upload', {
-		method: 'POST',
-		body: createFormData(this.state.image, { userId: '123' }),
-	})
-		.then(response => response.json())
-		.then(response => {
-			console.log('upload succes', response);
-			alert('Upload success!');
-			this.setState({ image: null });
-		})
-		.catch(error => {
-			console.log('upload error', error);
-			alert('Upload failed!');
-		});
-};
-
-const styles = StyleSheet.create({
-	container: {
-		alignItems: 'center',
-		flex: 1,
-		justifyContent: 'center',
-	},
-	exampleText: {
-		fontSize: 20,
-		marginBottom: 20,
-		marginHorizontal: 15,
-		textAlign: 'center',
-	},
-	maybeRenderUploading: {
-		alignItems: 'center',
-		backgroundColor: 'rgba(0,0,0,0.4)',
-		justifyContent: 'center',
-	},
-	maybeRenderContainer: {
-		borderRadius: 3,
-		elevation: 2,
-		marginTop: 30,
-		shadowColor: 'rgba(0,0,0,1)',
-		shadowOpacity: 0.2,
-		shadowOffset: {
-			height: 4,
-			width: 4,
-		},
-		shadowRadius: 5,
-		width: 250,
-	},
-	maybeRenderImageContainer: {
-		borderTopLeftRadius: 3,
-		borderTopRightRadius: 3,
-		overflow: 'hidden',
-	},
-	maybeRenderImage: {
-		height: 250,
-		width: 250,
-	},
-	maybeRenderImageText: {
-		paddingHorizontal: 10,
-		paddingVertical: 10,
-	},
-});
