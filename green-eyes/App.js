@@ -7,10 +7,31 @@ export default class App extends React.Component {
 		photo: null,
 	};
 
+	handleURL = () => {
+		fetch('http://localhost:3000/api/url', {
+			method: 'POST',
+			body: JSON.stringify({
+				url: 'https://watson-developer-cloud.github.io/doc-tutorial-downloads/visual-recognition/fruitbowl.jpg',
+			}), // data can be `string` or {object}!
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+			.then(response => response.json())
+			.then(response => {
+				console.log('url submit succes', response);
+				alert('url submit success!');
+			})
+			.catch(error => {
+				console.log('url error', error);
+				alert('Url failed!');
+			});
+	};
+
 	handleUpload = () => {
 		fetch('http://localhost:3000/api/upload', {
 			method: 'POST',
-			body: createFormData(this.state.photo),
+			body: createFormData(this.state.photo, { userId: '123' }),
 		})
 			.then(response => response.json())
 			.then(response => {
@@ -50,20 +71,13 @@ export default class App extends React.Component {
 					</React.Fragment>
 				)}
 				<Button title="Choose Photo" onPress={this.handleChoosePhoto} />
+				<Button title="Test URL" onPress={this.handleURL} />
 			</View>
 		);
 	}
 }
 
-const createFormData = photo => {
-	// const data = new FormData();
-
-	// data.append('photo', {
-	// 	name: photo.fileName,
-	// 	type: photo.type,
-	// 	uri: Platform.OS === 'android' ? photo.uri : photo.uri.replace('file://', ''),
-	// });
-
+const createFormData = (photo, body) => {
 	let uriParts = photo.uri.split('.');
 	let fileType = uriParts[uriParts.length - 1];
 
@@ -74,17 +88,9 @@ const createFormData = photo => {
 		uri: photo.uri,
 	});
 
-	// let options = {
-	// 	method: 'POST',
-	// 	body: formData,
-	// 	headers: {
-	// 		Accept: 'application/json',
-	// 		'Content-Type': 'multipart/form-data',
-	// 	},
-	// };
+	Object.keys(body).forEach(key => {
+		formData.append(key, body[key]);
+	});
 
-	// return fetch(apiUrl, options);
-
-	// return data;
 	return formData;
 };
