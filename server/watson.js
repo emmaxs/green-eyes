@@ -1,8 +1,17 @@
 const Express = require('express');
 const bodyParser = require('body-parser');
+const multer = require('multer');
 
 const app = Express();
 app.use(bodyParser.json());
+
+// Sets up where to store POST images
+const storage = multer.diskStorage({
+	destination: function(req, res, cb) {
+		cb(null, './images');
+	},
+});
+const upload = multer({ storage: storage });
 
 var VisualRecognitionV3 = require('watson-developer-cloud/visual-recognition/v3');
 
@@ -22,6 +31,26 @@ app.get('/', (req, res) => {
 // 		message: 'success!',
 // 	});
 // });
+
+app.post('/api/upload', upload.single('photo'), (req, res) => {
+	// var url = req.body.photo.uri;
+	// var classifier_ids = ['food'];
+
+	// var params = {
+	// 	url: url,
+	// 	classifier_ids: classifier_ids,
+	// };
+
+	// visualRecognition.classify(params, function(err, response) {
+	// 	if (err) console.log(err);
+	// 	else console.log(JSON.stringify(response, null, 2));
+	// });
+	console.log('file', req.files);
+	console.log('body', req.body);
+	res.status(200).json({
+		message: 'successful upload!',
+	});
+});
 
 app.post('/api/url', (req, res) => {
 	var url = req.body.url;
