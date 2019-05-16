@@ -31,7 +31,7 @@ export default class App extends React.Component {
 	handleUpload = () => {
 		fetch('http://localhost:3000/api/upload', {
 			method: 'POST',
-			body: createFormData(this.state.photo, { userId: '123' }),
+			body: createFormData(this.state.photo),
 		})
 			.then(response => response.json())
 			.then(response => {
@@ -43,6 +43,23 @@ export default class App extends React.Component {
 				console.log('upload error', error);
 				alert('Upload failed!');
 			});
+	};
+
+	handleTakePhoto = async () => {
+		const { status: cameraPerm } = await Permissions.askAsync(Permissions.CAMERA);
+
+		const { status: cameraRollPerm } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+		// only if user allows permission to camera AND camera roll
+		if (cameraPerm === 'granted' && cameraRollPerm === 'granted') {
+			let pickerResult = await ImagePicker.launchCameraAsync({
+				allowsEditing: true,
+				aspect: [4, 3],
+			});
+			if (pickerResult.uri) {
+				this.setState({ photo: pickerResult });
+			}
+		}
 	};
 
 	handleChoosePhoto = async () => {
@@ -70,6 +87,7 @@ export default class App extends React.Component {
 						<Button title="Upload" onPress={this.handleUpload} />
 					</React.Fragment>
 				)}
+				<Button title="Take Photo" onPress={this.handleTakePhoto} />
 				<Button title="Choose Photo" onPress={this.handleChoosePhoto} />
 				<Button title="Test URL" onPress={this.handleURL} />
 			</View>
@@ -77,7 +95,7 @@ export default class App extends React.Component {
 	}
 }
 
-const createFormData = (photo, body) => {
+const createFormData = photo => {
 	let uriParts = photo.uri.split('.');
 	let fileType = uriParts[uriParts.length - 1];
 
@@ -86,10 +104,6 @@ const createFormData = (photo, body) => {
 		name: photo.fileName,
 		type: fileType,
 		uri: photo.uri,
-	});
-
-	Object.keys(body).forEach(key => {
-		formData.append(key, body[key]);
 	});
 
 	return formData;
