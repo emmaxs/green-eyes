@@ -1,8 +1,10 @@
 const Express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
-var fs = require('fs');
+const VisualRecognitionV3 = require('watson-developer-cloud/visual-recognition/v3');
+const fs = require('fs');
 
+// Sets up express
 const app = Express();
 app.use(bodyParser.json());
 
@@ -17,8 +19,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-var VisualRecognitionV3 = require('watson-developer-cloud/visual-recognition/v3');
-
+// new Visual Recognition service
 var visualRecognition = new VisualRecognitionV3({
 	version: '2018-03-19',
 	iam_apikey: 'g6MjJJPhgOv5oZ5cIN_bK4yKBGwOq-tuaNtrsYcA7Egh',
@@ -73,6 +74,31 @@ app.post('/api/url', (req, res) => {
 
 	res.status(200).json({
 		message: 'successful url!',
+	});
+});
+
+app.post('/api/fruit', (req, res) => {
+	var classifyParams = {
+		images_file: fs.createReadStream(req.body.file),
+		/* just for food */
+		classifier_ids: ['food'],
+		/* otherwise */
+
+		// owners: ['me'],
+		// threshold: 0.6,
+	};
+
+	visualRecognition
+		.classify(classifyParams)
+		.then(classifiedImages => {
+			console.log(JSON.stringify(classifiedImages, null, 2));
+		})
+		.catch(err => {
+			console.log('error:', err);
+		});
+
+	res.status(200).json({
+		message: 'successful fruit!',
 	});
 });
 
