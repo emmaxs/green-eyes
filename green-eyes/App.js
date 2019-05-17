@@ -94,7 +94,7 @@ export default class App extends React.Component {
 				)}
 				<Button title="Take Photo" onPress={this.handleTakePhoto} />
 				<Button title="Choose Photo" onPress={this.handleChoosePhoto} />
-				<Button title="Test URL" onPress={this.handleURL} />
+				<Button title="Test Fruit URL" onPress={this.handleURL} />
 			</View>
 		);
 	}
@@ -111,6 +111,5 @@ const createFormData = photo => {
 		name: `photo.${fileType}`,
 		type: `image/${fileType}`,
 	});
-
 	return formData;
 };
