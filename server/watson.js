@@ -8,10 +8,11 @@ const fs = require('fs');
 const app = Express();
 app.use(bodyParser.json());
 
+const location = './images';
 // Sets up where to store POST images
 const storage = multer.diskStorage({
 	destination: function(req, res, cb) {
-		cb(null, './images');
+		cb(null, location);
 	},
 	filename(req, file, callback) {
 		callback(null, `${file.fieldname}_${Date.now()}_${file.originalname}`);
@@ -33,7 +34,7 @@ app.post('/api/upload', upload.single('photo'), (req, res, next) => {
 	console.log(req.file.filename);
 
 	var classifyParams = {
-		images_file: fs.createReadStream(`./images/${req.file.filename}`),
+		images_file: fs.createReadStream(`${location}/${req.file.filename}`),
 		/* just for food */
 		classifier_ids: ['food'],
 		/* otherwise */
@@ -71,32 +72,7 @@ app.post('/api/url', (req, res) => {
 	});
 
 	res.status(200).json({
-		message: 'successful url!',
-	});
-});
-
-app.post('/api/fruit', (req, res) => {
-	var classifyParams = {
-		images_file: fs.createReadStream(req.body.file),
-		/* just for food */
-		classifier_ids: ['food'],
-		/* otherwise */
-
-		// owners: ['me'],
-		// threshold: 0.6,
-	};
-
-	visualRecognition
-		.classify(classifyParams)
-		.then(classifiedImages => {
-			console.log(JSON.stringify(classifiedImages, null, 2));
-		})
-		.catch(err => {
-			console.log('error:', err);
-		});
-
-	res.status(200).json({
-		message: 'successful fruit!',
+		message: 'successful test fruit url!',
 	});
 });
 

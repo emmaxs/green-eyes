@@ -28,27 +28,6 @@ export default class App extends React.Component {
 			});
 	};
 
-	handleFruit = () => {
-		fetch('http://localhost:3000/api/fruit', {
-			method: 'POST',
-			body: JSON.stringify({
-				file: './images/fruitbowl.jpg',
-			}), // data can be `string` or {object}!
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		})
-			.then(response => response.json())
-			.then(response => {
-				console.log('url submit succes', response);
-				alert('fruit submit success!');
-			})
-			.catch(error => {
-				console.log('url error', error);
-				alert('fruit failed!');
-			});
-	};
-
 	handleUpload = () => {
 		fetch('http://localhost:3000/api/upload', {
 			method: 'POST',
@@ -115,8 +94,7 @@ export default class App extends React.Component {
 				)}
 				<Button title="Take Photo" onPress={this.handleTakePhoto} />
 				<Button title="Choose Photo" onPress={this.handleChoosePhoto} />
-				<Button title="Test URL" onPress={this.handleURL} />
-				<Button title="Test Fruit" onPress={this.handleFruit} />
+				<Button title="Test Fruit URL" onPress={this.handleURL} />
 			</View>
 		);
 	}
