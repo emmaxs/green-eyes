@@ -31,6 +31,10 @@ export default class App extends React.Component {
 	handleUpload = () => {
 		fetch('http://localhost:3000/api/upload', {
 			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'multipart/form-data',
+			},
 			body: createFormData(this.state.photo),
 		})
 			.then(response => response.json())
@@ -71,6 +75,7 @@ export default class App extends React.Component {
 				allowsEditing: true,
 				aspect: [4, 3],
 			});
+			console.log(pickerResult.uri);
 			if (pickerResult.uri) {
 				this.setState({ photo: pickerResult });
 			}
@@ -96,14 +101,15 @@ export default class App extends React.Component {
 }
 
 const createFormData = photo => {
-	let uriParts = photo.uri.split('.');
+	let uri = photo.uri;
+	let uriParts = uri.split('.');
 	let fileType = uriParts[uriParts.length - 1];
 
 	let formData = new FormData();
 	formData.append('photo', {
-		name: photo.fileName,
-		type: fileType,
-		uri: photo.uri,
+		uri,
+		name: `photo.${fileType}`,
+		type: `image/${fileType}`,
 	});
 
 	return formData;
