@@ -1,6 +1,7 @@
 const Express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
+var fs = require('fs');
 
 const app = Express();
 app.use(bodyParser.json());
@@ -9,6 +10,9 @@ app.use(bodyParser.json());
 const storage = multer.diskStorage({
 	destination: function(req, res, cb) {
 		cb(null, './images');
+	},
+	filename(req, file, callback) {
+		callback(null, `${file.fieldname}_${Date.now()}_${file.originalname}`);
 	},
 });
 const upload = multer({ storage: storage });
@@ -24,15 +28,7 @@ app.get('/', (req, res) => {
 	res.status(200).send('You can post to /api/upload.');
 });
 
-// app.post('/api/upload', upload.array('photo', 3), (req, res) => {
-// 	console.log('file', req.files);
-// 	console.log('body', req.body);
-// 	res.status(200).json({
-// 		message: 'success!',
-// 	});
-// });
-
-app.post('/api/upload', upload.single('photo'), (req, res) => {
+app.post('/api/upload', upload.single('photo'), (req, res, next) => {
 	// var url = req.body.photo.uri;
 	// var classifier_ids = ['food'];
 
@@ -45,8 +41,17 @@ app.post('/api/upload', upload.single('photo'), (req, res) => {
 	// 	if (err) console.log(err);
 	// 	else console.log(JSON.stringify(response, null, 2));
 	// });
-	console.log('file', req.files);
-	console.log('body', req.body);
+	// console.log('file', req.file);
+	// console.log('body', req.body);
+
+	// fs.readFile(req.file.path, (err, contents) => {
+	// 	if (err) {
+	// 		console.log('Error: ', err);
+	// 	} else {
+	// 		console.log('File contents ', contents);
+	// 	}
+	// });
+	// res.json(req.file);
 	res.status(200).json({
 		message: 'successful upload!',
 	});
@@ -66,8 +71,6 @@ app.post('/api/url', (req, res) => {
 		else console.log(JSON.stringify(response, null, 2));
 	});
 
-	// console.log('file', req.files);
-	// console.log('body', req.body);
 	res.status(200).json({
 		message: 'successful url!',
 	});
