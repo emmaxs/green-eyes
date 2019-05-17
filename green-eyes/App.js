@@ -133,6 +133,5 @@ const createFormData = photo => {
 		name: `photo.${fileType}`,
 		type: `image/${fileType}`,
 	});
-
 	return formData;
 };

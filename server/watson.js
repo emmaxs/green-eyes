@@ -30,29 +30,27 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/upload', upload.single('photo'), (req, res, next) => {
-	// var url = req.body.photo.uri;
-	// var classifier_ids = ['food'];
+	console.log(req.file.filename);
 
-	// var params = {
-	// 	url: url,
-	// 	classifier_ids: classifier_ids,
-	// };
+	var classifyParams = {
+		images_file: fs.createReadStream(`./images/${req.file.filename}`),
+		/* just for food */
+		classifier_ids: ['food'],
+		/* otherwise */
 
-	// visualRecognition.classify(params, function(err, response) {
-	// 	if (err) console.log(err);
-	// 	else console.log(JSON.stringify(response, null, 2));
-	// });
-	// console.log('file', req.file);
-	// console.log('body', req.body);
+		// owners: ['me'],
+		// threshold: 0.6,
+	};
 
-	// fs.readFile(req.file.path, (err, contents) => {
-	// 	if (err) {
-	// 		console.log('Error: ', err);
-	// 	} else {
-	// 		console.log('File contents ', contents);
-	// 	}
-	// });
-	// res.json(req.file);
+	visualRecognition
+		.classify(classifyParams)
+		.then(classifiedImages => {
+			console.log(JSON.stringify(classifiedImages, null, 2));
+		})
+		.catch(err => {
+			console.log('error:', err);
+		});
+
 	res.status(200).json({
 		message: 'successful upload!',
 	});
