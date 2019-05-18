@@ -5,6 +5,7 @@ import { Constants, ImagePicker, Permissions } from 'expo';
 export default class App extends React.Component {
 	state = {
 		photo: null,
+		clothing: null,
 	};
 
 	handleURL = () => {
@@ -39,9 +40,13 @@ export default class App extends React.Component {
 		})
 			.then(response => response.json())
 			.then(response => {
-				console.log('upload succes', response);
+				console.log(response);
+				/* for multiple keywords, do an array/selector possibly in new funct */
+				var keyword = response.data;
+				this.setState({ clothing: keyword });
+				// alert
+				console.log('upload success', response.message);
 				alert('Upload success!');
-				this.setState({ photo: null });
 			})
 			.catch(error => {
 				console.log('upload error', error);
@@ -75,7 +80,6 @@ export default class App extends React.Component {
 				allowsEditing: true,
 				aspect: [4, 3],
 			});
-			console.log(pickerResult.uri);
 			if (pickerResult.uri) {
 				this.setState({ photo: pickerResult });
 			}
@@ -83,18 +87,18 @@ export default class App extends React.Component {
 	};
 
 	render() {
-		const { photo } = this.state;
 		return (
 			<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-				{photo && (
+				{this.state.photo && (
 					<React.Fragment>
-						<Image source={{ uri: photo.uri }} style={{ width: 300, height: 300 }} />
+						<Image source={{ uri: this.state.photo.uri }} style={{ width: 300, height: 300 }} />
 						<Button title="Upload" onPress={this.handleUpload} />
 					</React.Fragment>
 				)}
 				<Button title="Take Photo" onPress={this.handleTakePhoto} />
 				<Button title="Choose Photo" onPress={this.handleChoosePhoto} />
-				<Button title="Test Fruit URL" onPress={this.handleURL} />
+				{/* <Button title="Test Fruit URL" onPress={this.handleURL} /> */}
+				{this.state.clothing && <Text> We have found {this.state.clothing} in this picture. </Text>}
 			</View>
 		);
 	}
