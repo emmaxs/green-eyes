@@ -12,13 +12,19 @@ React Native app with Node.js backend to classify photos into outfits and search
 ### Current Functionality
 - Upload photo from gallery or camera
 - Submit to Watson Food Recognition Service
+- Extract a Keyword from the results
 
 ### Next Steps
-- Parse results of classifier
-- Display results of classification
-- Get and Display search results + scraping
+- Display threshold results of classification
+- UI Changes
+- Add Picker to select attributes of clothing to add to keywords
 
-###  Extra To-Do
+### Other Parts
+- Actually build fashion classifier
+- Crawl the web for results
+
+###  UI Changes
+[ ] Add Picker to select method of image upload
 [ ] Add Splash Screen
 [ ] Add Basic Texts Explaining
 [ ] Basic UI
