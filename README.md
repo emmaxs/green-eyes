@@ -7,7 +7,9 @@ React Native app with Node.js backend to classify photos into outfits and search
 ### Instructions
 1) Clone the repository
 2) In `server/`, run `yarn install` and `node index.js`
-3) In `mobile/`, run `yarn install` and `yarn start` to start expo.
+3) In `mobile/`, run `yarn install` and `yarn start` or `expo start` to start expo.
+
+Go ahead and play with the app in a simulator!
 
 ### Current Functionality
 - Upload photo from gallery or camera

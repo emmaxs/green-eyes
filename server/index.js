@@ -1,7 +1,7 @@
 const Express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
-const VisualRecognitionV3 = require('watson-developer-cloud/visual-recognition/v3');
+const VisualRecognitionV3 = require('ibm-watson/visual-recognition/v3');
 const fs = require('fs');
 
 // Sets up express
