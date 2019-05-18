@@ -32,4 +32,3 @@ React Native app with Node.js backend to classify photos into outfits and search
 ### Should Do
 - Change auth files and urls to a separate .env file
 - Change image storage to some kind of public directory
-- Possibly clear out old modules
