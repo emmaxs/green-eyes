@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, Button } from 'react-native';
 import { Constants, ImagePicker, Permissions } from 'expo';
+import SearchScreen from './components/SearchScreen';
 
 export default class App extends React.Component {
 	state = {
@@ -98,6 +99,7 @@ export default class App extends React.Component {
 				<Button title="Take Photo" onPress={this.handleTakePhoto} />
 				<Button title="Choose Photo" onPress={this.handleChoosePhoto} />
 				<Button title="Test Fruit URL" onPress={this.handleURL} />
+				<SearchScreen/>
 				{this.state.clothing && <Text> We have found {this.state.clothing} in this picture. </Text>}
 			</View>
 		);
