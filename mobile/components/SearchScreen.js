@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, Web} from 'react-native';
+import {Text, Web, View, Button} from 'react-native';
 import axios from 'axios';
 
 import cheerio from 'react-native-cheerio';
@@ -145,69 +145,38 @@ export default class SearchScreen extends React.Component{
     }).catch(function(error){
       console.log("there was an error");
     });
-    console.log("am i getting here?");
-    //const htmlString = await response.text();
-
     const $ = cheerio.load(htmlString);
-    //console.log($.html());
-    //const my_List = $('#pagebody').find('ul').text();
     const my_List = $('.results-grid-item').text();
-    //console.log(my_List);
-    //console.log(my_List.length);
-    console.log("printed the list");
-    // $('#pagebody').find('ul').map(
-    //   function(i, el){
-    //     return $(this).text();
-    //   }
-    // ).get().join(' huh ');
 
-    //console.log(htmlString);
     var name_list = [];
     $('.results-grid-item').each((i,el) => {
       const item = $(el).find('.item-card-bottom').find('.item-title').text();
-      //console.log('here we go');
       name_list.push(item);
     });
-
-    //const $$ = cheerio.load($('.results-grid-item').html())
-    // var pic_list = [];
-    // console.log('about to scrap the picture locations ');
-    // console.log($('.results-grid-item').find('.item-card-top').find('._1fkzD').html());
-    // $('img').each((i,el) => {
-    //   console.log("Found Imagesssssssss");
-    //   const item = $$(el).attrib('src');
-    //   //console.log('here we go');
-    //   pic_list.push(item);
-    // });
-    // console.log('finished scraping the picture locations ');
 
 
     var price_list = [];
     $('.results-grid-item').each((i,el) => {
       const item = $(el).find('.price-line').find('.formatted-prices').text();
-
-      //console.log('here we go');
       price_list.push(item);
     });
 
     var link_list = [];
     $('.results-grid-item').each((i,el) => {
       const item = $(el).find('a').attr('href');
-      //console.log('here we go');
       full_link = 'https://www.thredup.com' + item;
       link_list.push(full_link);
     });
 
     photo_list = []
     for(let i = 0; i< link_list.length; i++){
-      axios.get(link_list[i]).then((response)=>{
+      await axios.get(link_list[i]).then((response)=>{
       const $ = cheerio.load(response.data);
-      const link = $('img').attr('src');
+      //const link = $('img').attr('src');
       var link2 = $('.zoom-overlay').css('background-image');
       // break up link 2 and get the exact address:
       link2 = link2.slice(4, link2.length - 1);
       console.log('extracting link here');
-      //console.log(link2.length);
       console.log(link2);
       photo_list.push(link2);
       }).catch((error)=>{
@@ -227,11 +196,18 @@ export default class SearchScreen extends React.Component{
 
 
   render(){
-  //  this.buildLinks();
-    this.readThreadUpPage();
-    //this.readSwapPage();
-    //this.readAxios();
-    return(<Text> {this.state.searchTerm[0]} </Text>);
+    return(
+      <View>
+      <Text> {this.state.searchTerm.join(" ")} </Text>
+            <Button
+        onPress={this.readThreadUpPage}
+        title="Search"
+        color="#841584"
+        accessibilityLabel="Learn more about this purple button"
+      />
+      </View>
+
+    );
   }
 }
 
