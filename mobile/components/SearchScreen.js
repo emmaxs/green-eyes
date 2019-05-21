@@ -1,12 +1,10 @@
 import React from 'react';
-import {Text, Web, View, Button, Image} from 'react-native';
+import {Text, Web, View, Button, Image, ScrollView} from 'react-native';
 import axios from 'axios';
 
 import cheerio from 'react-native-cheerio';
-
+import Item from '../components/Item';
 export default class SearchScreen extends React.Component{
-  // constructor here
-  //
   constructor(props) {
   super(props);
   this.state = {
@@ -35,9 +33,6 @@ export default class SearchScreen extends React.Component{
 
 }
 
-// {this.state.resultItems.length == 0 && <Text> Nothing to display yet</Text> }
-// {this.state.resultItems.length > 0 && this.state.searchCompleted && <Text> Search has items for display </Text>}
-
   renderResults = () => {
     if(this.state.resultItems.length == 0 ){
       return (
@@ -49,48 +44,30 @@ export default class SearchScreen extends React.Component{
     else if (this.state.resultItems.length > 0 && this.state.searchCompleted){
       // do the map work here
       //return (<Text> Nothing to display yet 2</Text>);
-      console.log(this.state.resultItems[0].itemPhoto);
+      //console.log(this.state.resultItems[0].itemPhoto);
       return this.state.resultItems.map( (id, item)=> {
         return(
+          <Item
+            key={id.itemPrice}
+            itemName={id.itemName}
+            itemPrice={id.itemPrice}
+            itemPhoto={id.itemPhoto}
+          />
 
-          <View>
-            <Text>{id.itemName}</Text>
-            <Image style={{width: 200, height: 200}}
-            source={{uri: id.itemPhoto}}/>
-            <Text>{id.itemPrice}</Text>
-          </View>
+          // itemLink={} TODO
+          // <View>
+          //   <Text>{id.itemName}</Text>
+          //   <Image style={{width: 200, height: 200}}
+          //   source={{uri: id.itemPhoto}}/>
+          //   <Text>{id.itemPrice}</Text>
+          // </View>
         );
-      }
-
-
-      );
-      // return(
-      //   <View>
-      //     <Text>{this.state.resultItems[0].itemName}</Text>
-      //     <Image style={{width: 200, height: 200}}
-      //     source={{uri: this.state.resultItems[0].itemPhoto}}/>
-      //     <Text>{this.state.resultItems[0].itemPrice}</Text>
-      //   </View>
-      // );
+      });
     } else{
       return (<Text> Nothing to display yet 3</Text>);
     }
-    // return(
-    //   //<View>
-    //     //<Text> Nothing to display yet</Text>
-    //     if(this.state.resultItems.length == 0 ){
-    //       return (<Text> Nothing to display yet</Text>);
-    //     }
-    //     }
-    //   { this.state.resultItems.length == 0 && <Text> Nothing to display yet</Text> }
-    //   // {this.state.resultItems.length > 0 && this.state.searchCompleted && <Text> Search has items for display </Text>}
-    //   //</View>
-    // );
   }
 
-  // renderResults(){
-  //   return (this.state.resultItems.length == 0 && <Text> Nothing to display yet</Text>) ;
-  // }
   buildLinks(){
     var threadURL = '';
     var swapURL = 'https://www.swap.com/shop/?q=';
@@ -207,8 +184,8 @@ export default class SearchScreen extends React.Component{
 
   render(){
     return(
-
       <View>
+        <ScrollView>
         <Text> {this.state.searchTerm.join(" ")} </Text>
         <Button
         onPress={this.readThreadUpPage}
@@ -221,33 +198,9 @@ export default class SearchScreen extends React.Component{
         title="Show search results"
         color="#841584"
         accessibilityLabel="RenderSearch"/>
-
         {this.renderResults()}
+        </ScrollView>
       </View>
-
-
-
       );
-
-      //<View> {this.renderResults()} </View>
-    //</View>
-    // <Button
-    // onPress={this.readThreadUpPage}
-    // title="Search"
-    // color="#841584"
-    // accessibilityLabel="Search"/>
-    //
-    // <Button
-    // onPress={this.buildSearchResults}
-    // title="Show search results"
-    // color="#841584"
-    // accessibilityLabel="RenderSearch"/>
     }
   }
-
-
-
-
-// results-grid-item
-  // carousel-results-item item-card listed
-    // item-card-top (has pics)
