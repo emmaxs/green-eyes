@@ -148,7 +148,8 @@ export default class App extends React.Component {
 							)}
 							{this.state.clothing && <Text> We have found {this.state.clothing} in this picture. </Text>}
 						</View>
-						{this.state.clothing && <DeckSwiperExample />}
+						{/* this.state.clothing && */}
+						<DeckSwiperExample />
 					</Content>
 				</Container>
 			</Root>

@@ -1,6 +1,18 @@
 import React, { Component } from 'react';
 import { Image } from 'react-native';
-import { Container, Header, View, DeckSwiper, Card, CardItem, Thumbnail, Text, Left, Body, Icon } from 'native-base';
+import {
+	Container,
+	Header,
+	View,
+	DeckSwiper,
+	Card,
+	CardItem,
+	Thumbnail,
+	Text,
+	Left,
+	Body,
+	Accordion,
+} from 'native-base';
 const cards = [
 	{
 		text: 'Card One',
@@ -18,6 +30,9 @@ const cards = [
 		image: require('../assets/icon.png'),
 	},
 ];
+
+const dataArray = [{ title: 'First Element', content: 'Lorem ipsum dolor sit amet' }];
+
 export default class DeckSwiperExample extends Component {
 	render() {
 		return (
@@ -41,8 +56,7 @@ export default class DeckSwiperExample extends Component {
 									<Image style={{ height: 300, flex: 1 }} source={item.image} />
 								</CardItem>
 								<CardItem>
-									<Icon name="heart" style={{ color: '#ED4A6A' }} />
-									<Text>{item.name}</Text>
+									<Accordion dataArray={dataArray} icon="add" expandedIcon="remove" />
 								</CardItem>
 							</Card>
 						)}
