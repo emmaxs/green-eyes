@@ -3,6 +3,7 @@ import { View, Text, Image } from 'react-native';
 import { Root, ActionSheet, Container, Header, Title, Button, Left, Right, Body, Icon, Content } from 'native-base';
 import { ImagePicker, Permissions } from 'expo';
 import DeckSwiperExample from '../components/DeckSwiper';
+import SearchScreen from './SearchScreen';
 
 var BUTTONS = ['Take Photo', 'Upload From Camera Roll', 'Go Back'];
 var CANCEL_INDEX = 2;
@@ -149,6 +150,7 @@ export default class App extends React.Component {
 							{this.state.clothing && <Text> We have found {this.state.clothing} in this picture. </Text>}
 						</View>
 						{/* this.state.clothing && */}
+						<SearchScreen />
 						<DeckSwiperExample />
 					</Content>
 				</Container>
