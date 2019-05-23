@@ -1,6 +1,8 @@
+/* eslint-disable */
+
 import React from 'react';
 import { View, Text, Image, Button, ScrollView } from 'react-native';
-import { Constants, ImagePicker, Permissions } from 'expo';
+import { ImagePicker, Permissions } from 'expo';
 import SearchScreen from './components/SearchScreen';
 
 export default class App extends React.Component {
@@ -102,7 +104,7 @@ export default class App extends React.Component {
 					<Button title="Test Fruit URL" onPress={this.handleURL} />
 					<SearchScreen/>
 					{this.state.clothing && <Text> We have found {this.state.clothing} in this picture. </Text>}
-				</View>
+					</View>
 			</ScrollView>
 		);
 	}
