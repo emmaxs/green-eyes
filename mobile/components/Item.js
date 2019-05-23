@@ -49,7 +49,7 @@ export default class Item extends React.Component {
             style={{ marginTop: 100 }}
           />
           <Button
-            onPress={this.triggerModal}
+            onPress={this.closeModal}
             title="Close window"
             color="#841584"
             accessibilityLabel="close window"
