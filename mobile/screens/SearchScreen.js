@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { Button, Icon } from 'native-base';
+import { Button, Icon, Spinner } from 'native-base';
 import axios from 'axios';
 
 import cheerio from 'react-native-cheerio';
@@ -16,6 +16,7 @@ export default class SearchScreen extends React.Component {
 			name_list: [],
 			price_list: [],
 			link_list: [],
+			searchStarted: false,
 			searchCompleted: false,
 			photo_list: [],
 		};
@@ -29,11 +30,22 @@ export default class SearchScreen extends React.Component {
 
 	renderResults = () => {
 		if (this.state.resultItems.length === 0) {
-			return (
-				<View>
-					<Text> Nothing to display yet </Text>
-				</View>
-			);
+			if (this.state.searchStarted) {
+				return (
+					<View>
+						{/* possibly add fast fashion facts */}
+						<Spinner color="green" />
+					</View>
+				);
+			}
+			/* possibly display a view explanation? */
+			// } else {
+			// 	return (
+			// 		<View>
+			// 			<Text> Nothing to display yet </Text>
+			// 		</View>
+			// 	);
+			// }
 		} else if (this.state.resultItems.length > 0 && this.state.searchCompleted) {
 			return this.state.resultItems.map((id, item) => {
 				return (
@@ -52,6 +64,7 @@ export default class SearchScreen extends React.Component {
 	};
 
 	readThreadUpPage = async () => {
+		this.setState({ searchStarted: true });
 		console.log('called the read page method');
 		let htmlString = '';
 		const response = await fetch(this.state.threadUPLink)
@@ -173,12 +186,6 @@ export default class SearchScreen extends React.Component {
 					//   {' '}
 					// </Text>
 				}
-				{/* <Button
-          onPress={this.readThreadUpPage}
-          title="Search"
-          color="#841584"
-          accessibilityLabel="Search"
-        /> */}
 				<Button iconLeft block success onPress={this.readThreadUpPage}>
 					<Text>Search for Red Shoes</Text>
 					<Icon name="beer" />
