@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { Button, Icon } from 'native-base';
+import { Button, Icon, Spinner } from 'native-base';
 import axios from 'axios';
 
 import cheerio from 'react-native-cheerio';
@@ -62,9 +62,10 @@ export default class SearchScreen extends React.Component {
 	}
 
 	readThreadUpPage = async () => {
+	  this.setState({ searchStarted: true });
 	  console.log('called the read page method');
 	  let htmlString = '';
-	  await fetch(this.state.threadUPLink)
+	  const response = await fetch(this.state.threadUPLink)
 	    .then(async (response) => {
 	      if (!response.ok) {
 	        console.log('There is an error');
@@ -78,6 +79,7 @@ export default class SearchScreen extends React.Component {
 	      console.log('there was an error');
 	    });
 	  const $ = cheerio.load(htmlString);
+	  const my_List = $('.results-grid-item').text();
 
 	  const name_list1 = [];
 	  $('.results-grid-item').each((i, el) => {
@@ -114,7 +116,7 @@ export default class SearchScreen extends React.Component {
 	  const photo_list1 = [];
 	  // TODO: remove the 5 here
 	  // for(let i = 0; i< link_list1.length; i++){
-	  for (let i = 0; i < 5; i += 1) {
+	  for (let i = 0; i < 5; i++) {
 	    await axios
 	      .get(link_list1[i])
 	      .then((response) => {
@@ -136,7 +138,7 @@ export default class SearchScreen extends React.Component {
 	  console.log('completed extracting links. Now printing everything:');
 
 	  // TODO : remove the 5 here
-	  for (let i = 0; i < 5; i += 1) {
+	  for (let i = 0; i < 5; i++) {
 	    console.log(name_list1[i], price_list1[i], link_list1[i], photo_list1[i]);
 	  }
 
@@ -183,12 +185,6 @@ export default class SearchScreen extends React.Component {
 					//   {' '}
 					// </Text>
 				}
-    {/* <Button
-          onPress={this.readThreadUpPage}
-          title="Search"
-          color="#841584"
-          accessibilityLabel="Search"
-        /> */}
     <Button iconLeft block success onPress={this.readThreadUpPage}>
       <Text>Search for Red Shoes</Text>
       <Icon name="beer" />
