@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, View, Modal, WebView, Image } from 'react-native';
-import { Button, Icon, Card, CardItem, Thumbnail, Left, Body } from 'native-base';
+import { View, Modal, WebView, Image } from 'react-native';
+import { Button, Text, Icon, Card, CardItem, Thumbnail, Left, Body } from 'native-base';
 
 export default class Item extends React.Component {
 	constructor(props) {
@@ -40,7 +40,7 @@ export default class Item extends React.Component {
 						<Image style={{ height: 300, flex: 1 }} source={{ uri: this.props.itemPhoto }} />
 					</CardItem>
 				</Card>
-				<Button iconLeft block info onPress={this.triggerModal}>
+				<Button iconRight block info onPress={this.triggerModal}>
 					<Text> View on Web </Text>
 					<Icon name="information-circle" />
 				</Button>
@@ -53,11 +53,13 @@ export default class Item extends React.Component {
 							this.setState((state, props) => ({ modalOn: false }));
 						}}
 					>
-						<WebView source={{ uri: this.props.itemLink }} style={{ marginTop: 100 }} />
-						<Button iconLeft block info onPress={this.closeModal}>
-							<Text>Close Window</Text>
+						<Text> </Text>
+						<Text> </Text>
+						<Button iconRight transparent dark onPress={this.closeModal}>
+							<Text>Close Window </Text>
 							<Icon name="close-circle-outline" />
 						</Button>
+						<WebView source={{ uri: this.props.itemLink }} style={{ marginTop: 100 }} />
 					</Modal>
 				)}
 			</View>

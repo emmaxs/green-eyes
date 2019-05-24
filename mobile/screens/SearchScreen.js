@@ -29,23 +29,13 @@ export default class SearchScreen extends React.Component {
 	}
 
 	renderResults = () => {
-		if (this.state.resultItems.length === 0) {
-			if (this.state.searchStarted) {
-				return (
-					<View>
-						{/* possibly add fast fashion facts */}
-						<Spinner color="green" />
-					</View>
-				);
-			}
-			/* possibly display a view explanation? */
-			// } else {
-			// 	return (
-			// 		<View>
-			// 			<Text> Nothing to display yet </Text>
-			// 		</View>
-			// 	);
-			// }
+		if (this.state.searchStarted && !this.searchCompleted) {
+			return (
+				<View>
+					{/* possibly add fast fashion facts */}
+					<Spinner color="green" />
+				</View>
+			);
 		} else if (this.state.resultItems.length > 0 && this.state.searchCompleted) {
 			return this.state.resultItems.map((id, item) => {
 				return (
@@ -58,9 +48,10 @@ export default class SearchScreen extends React.Component {
 					/>
 				);
 			});
-		} else {
-			return <Text> No results </Text>;
 		}
+		// else {
+		// 	return <Text> No results </Text>;
+		// }
 	};
 
 	readThreadUpPage = async () => {
@@ -171,7 +162,7 @@ export default class SearchScreen extends React.Component {
 			};
 			accumulator.push(singleItem);
 		}
-		this.setState({ resultItems: accumulator, searchCompleted: true });
+		this.setState({ resultItems: accumulator, searchCompleted: true, searchStarted: false });
 	}
 
 	render() {
@@ -186,9 +177,9 @@ export default class SearchScreen extends React.Component {
 					//   {' '}
 					// </Text>
 				}
-				<Button iconLeft block success onPress={this.readThreadUpPage}>
-					<Text>Search for Red Shoes</Text>
-					<Icon name="beer" />
+				<Button iconRight block success onPress={this.readThreadUpPage}>
+					<Text>Search for Red Shoes </Text>
+					<Icon name="search" />
 				</Button>
 				{this.renderResults()}
 			</View>
