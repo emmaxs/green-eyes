@@ -145,39 +145,41 @@ export default class App extends React.Component {
 							<Title>Green Eyes</Title>
 						</Body>
 						<Right>
+							<Text> </Text>
 							<Button transparent onPress={this.uploadButton}>
 								<Icon name="camera" />
 							</Button>
+							<Text> </Text>
 						</Right>
 					</Header>
 					<Content padder>
 						<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+							<Text> </Text>
 							{this.state.photo ? (
 								<React.Fragment>
 									<Image source={{ uri: this.state.photo.uri }} style={{ width: 300, height: 300 }} />
-									{/* add a spacer */}
+									<Text> </Text>
 									<Button iconRight block info onPress={this.handleUpload}>
-										<Text>Classify My Outfit </Text>
+										<Text> Classify My Outfit </Text>
 										<Icon name="shirt" />
 									</Button>
 								</React.Fragment>
 							) : (
 								<Button iconRight block info onPress={this.uploadButton}>
-									<Text>Upload a Picture </Text>
+									<Text> Upload a Picture </Text>
 									<Icon name="camera" />
 								</Button>
 							)}
 							{this.state.classifyingImage && <Spinner color="blue" />}
 							{this.state.classes && this.state.classificationComplete && (
-								<Text>
-									{' '}
-									We have found {this.state.classes} in this picture with {this.state.scores}{' '}
-									confidence.{' '}
-								</Text>
+								<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+									<Text> </Text>
+									<Text>We have found {this.state.searchTerms.join(', ')} in this picture.</Text>
+								</View>
 							)}
 						</View>
 						{/* pass a prop through for the search */}
-						<SearchScreen />
+						<SearchScreen searchTerms={this.state.searchTerms} />
 					</Content>
 				</Container>
 			</Root>

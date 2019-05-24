@@ -23,9 +23,6 @@ export default class Item extends React.Component {
 	render() {
 		return (
 			<View>
-				{/* <Image style={{ width: 200, height: 200 }} source={{ uri: this.props.itemPhoto }} />
-				<Text>{this.props.itemName}</Text>
-				<Text>{this.props.itemPrice}</Text> */}
 				<Card style={{ elevation: 3 }}>
 					<CardItem>
 						<Left>
@@ -41,8 +38,8 @@ export default class Item extends React.Component {
 					</CardItem>
 				</Card>
 				<Button iconRight block info onPress={this.triggerModal}>
-					<Text> View on Web </Text>
-					<Icon name="information-circle" />
+					<Text> Buy '{this.props.itemName}' </Text>
+					<Icon name="basket" />
 				</Button>
 				{/* WebView */}
 				{this.state.modalOn && (
@@ -59,7 +56,7 @@ export default class Item extends React.Component {
 							<Text>Close Window </Text>
 							<Icon name="close-circle-outline" />
 						</Button>
-						<WebView source={{ uri: this.props.itemLink }} style={{ marginTop: 100 }} />
+						<WebView source={{ uri: this.props.itemLink }} />
 					</Modal>
 				)}
 			</View>
