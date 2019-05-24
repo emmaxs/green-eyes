@@ -15,9 +15,10 @@ Go ahead and play with the app in a simulator!
 - Upload photo from gallery or camera
 - Submit to Watson Food Recognition Service
 - Extract a Keyword from the results
-
+---
 - Run a search on 'red shoes' display the result
-- Dummy front-end Deck Swiper component
+- Display results as cards
+- Open a link to ThredUp for each item
 
 ### Next Steps
 - Display threshold results of classification
@@ -30,9 +31,13 @@ Go ahead and play with the app in a simulator!
 
 ###  UI Changes
 [ ] Add Splash Screen
-[ ] Figure out text information
 [ ] Improve UI
+
+- Improve Spacing between the Views
+- Figure Out what text/instructions to display
+- Possibly put the cards in a deck swiper
 
 ### Should Do
 - Change auth files and urls to a separate .env file
 - Change image storage to some kind of public directory
+- Reduce package dependencies
