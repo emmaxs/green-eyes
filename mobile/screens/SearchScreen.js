@@ -37,13 +37,15 @@ export default class SearchScreen extends React.Component {
 						<Spinner color="green" />
 					</View>
 				);
-			} else {
-				return (
-					<View>
-						<Text> Nothing to display yet </Text>
-					</View>
-				);
 			}
+			/* possibly display a view explanation? */
+			// } else {
+			// 	return (
+			// 		<View>
+			// 			<Text> Nothing to display yet </Text>
+			// 		</View>
+			// 	);
+			// }
 		} else if (this.state.resultItems.length > 0 && this.state.searchCompleted) {
 			return this.state.resultItems.map((id, item) => {
 				return (
@@ -184,12 +186,6 @@ export default class SearchScreen extends React.Component {
 					//   {' '}
 					// </Text>
 				}
-				{/* <Button
-          onPress={this.readThreadUpPage}
-          title="Search"
-          color="#841584"
-          accessibilityLabel="Search"
-        /> */}
 				<Button iconLeft block success onPress={this.readThreadUpPage}>
 					<Text>Search for Red Shoes</Text>
 					<Icon name="beer" />

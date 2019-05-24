@@ -1,10 +1,11 @@
 import React from 'react';
 import { Text, View, Modal, WebView, Image } from 'react-native';
-import { Button, Icon } from 'native-base';
+import { Button, Icon, Card, CardItem, Thumbnail, Left, Body, Accordion } from 'native-base';
 
 export default class Item extends React.Component {
 	constructor(props) {
 		super(props);
+		this.data = [{ title: this.props.itemName, content: this.props.itemPrice }];
 		this.state = {
 			modalOn: false,
 		};
@@ -23,13 +24,32 @@ export default class Item extends React.Component {
 	render() {
 		return (
 			<View>
-				<Image style={{ width: 200, height: 200 }} source={{ uri: this.props.itemPhoto }} />
+				{/* <Image style={{ width: 200, height: 200 }} source={{ uri: this.props.itemPhoto }} />
 				<Text>{this.props.itemName}</Text>
-				<Text>{this.props.itemPrice}</Text>
+				<Text>{this.props.itemPrice}</Text> */}
+				<Card style={{ elevation: 3 }}>
+					<CardItem>
+						<Left>
+							<Thumbnail source={{ uri: this.props.itemPhoto }} />
+							<Body>
+								{/* replace hardcoding */}
+								<Text>{'ThredUp'}</Text>
+							</Body>
+						</Left>
+					</CardItem>
+					<CardItem cardBody>
+						<Image style={{ height: 300, flex: 1 }} source={{ uri: this.props.itemPhoto }} />
+					</CardItem>
+					<CardItem>
+						{/* maybe just do an expandible section */}
+						<Accordion dataArray={this.data} icon="add" expandedIcon="remove" />
+					</CardItem>
+				</Card>
 				<Button iconLeft block info onPress={this.triggerModal}>
-					<Text>View on Web</Text>
+					<Text> View on Web </Text>
 					<Icon name="information-circle" />
 				</Button>
+				{/* WebView */}
 				{this.state.modalOn && (
 					<Modal
 						animationType="slide"

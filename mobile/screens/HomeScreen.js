@@ -149,9 +149,9 @@ export default class App extends React.Component {
 							)}
 							{this.state.clothing && <Text> We have found {this.state.clothing} in this picture. </Text>}
 						</View>
-						{/* this.state.clothing && */}
+						{/* pass a prop through for the search */}
 						<SearchScreen />
-						<DeckSwiperExample />
+						{/* <DeckSwiperExample /> */}
 					</Content>
 				</Container>
 			</Root>
