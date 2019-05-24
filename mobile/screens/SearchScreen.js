@@ -21,6 +21,7 @@ export default class SearchScreen extends React.Component {
     };
 
     this.renderResults = this.renderResults.bind(this);
+    this.buildSearchURL = this.buildSearchURL.bind(this);
     this.buildLinks = this.buildLinks.bind(this);
     this.readThreadUpPage = this.readThreadUpPage.bind(this);
     this.buildSearchResults = this.buildSearchResults.bind(this);
@@ -51,10 +52,19 @@ export default class SearchScreen extends React.Component {
 	  }
 	};
 
+	buildSearchURL = () => {
+	  // get the json from watson
+	  // take the top three terms
+	  // using those build this.state.threadUPLink (call build links)
+	  // call readThreadUpPage
+	  // this should be called when the search button is pressed
+
+	}
+
 	readThreadUpPage = async () => {
 	  console.log('called the read page method');
 	  let htmlString = '';
-	  const response = await fetch(this.state.threadUPLink)
+	  await fetch(this.state.threadUPLink)
 	    .then(async (response) => {
 	      if (!response.ok) {
 	        console.log('There is an error');
@@ -68,7 +78,6 @@ export default class SearchScreen extends React.Component {
 	      console.log('there was an error');
 	    });
 	  const $ = cheerio.load(htmlString);
-	  const my_List = $('.results-grid-item').text();
 
 	  const name_list1 = [];
 	  $('.results-grid-item').each((i, el) => {
@@ -105,7 +114,7 @@ export default class SearchScreen extends React.Component {
 	  const photo_list1 = [];
 	  // TODO: remove the 5 here
 	  // for(let i = 0; i< link_list1.length; i++){
-	  for (let i = 0; i < 5; i++) {
+	  for (let i = 0; i < 5; i += 1) {
 	    await axios
 	      .get(link_list1[i])
 	      .then((response) => {
@@ -127,7 +136,7 @@ export default class SearchScreen extends React.Component {
 	  console.log('completed extracting links. Now printing everything:');
 
 	  // TODO : remove the 5 here
-	  for (let i = 0; i < 5; i++) {
+	  for (let i = 0; i < 5; i += 1) {
 	    console.log(name_list1[i], price_list1[i], link_list1[i], photo_list1[i]);
 	  }
 
@@ -136,20 +145,21 @@ export default class SearchScreen extends React.Component {
 	};
 
 	buildLinks() {
-	  let swapURL = 'https://www.swap.com/shop/?q=';
-	  for (let i = 0; i < this.state.searchTerm.length; i++) {
+	  let threadUPbaseURL = 'https://www.thredup.com/products/women?department_tags=women&sort=Relevance&text=';
+	  for (let i = 0; i < this.state.searchTerm.length; i += 1) {
 	    if (i === 0) {
-	      swapURL += this.state.searchTerm[0];
+	      threadUPbaseURL += this.state.searchTerm[0];
 	    } else {
-	      swapURL += `%20${this.state.searchTerm[i]}`;
+	      threadUPbaseURL += `+${this.state.searchTerm[i]}`;
 	    }
 	  }
-	  console.log(swapURL);
+	  // TODO modify this.state here
+	  console.log(threadUPbaseURL);
 	}
 
 	buildSearchResults() {
 	  const accumulator = [];
-	  for (let i = 0; i < 5; i++) {
+	  for (let i = 0; i < 5; i += 1) {
 	    const singleItem = {
 	      itemPrice: this.state.price_list[i],
 	      itemName: this.state.name_list[i],
