@@ -34,25 +34,33 @@ app.post('/api/upload', upload.single('photo'), (req, res, next) => {
 	var classifyParams = {
 		images_file: fs.createReadStream(`${location}/${req.file.filename}`),
 		/* just for food */
-		classifier_ids: ['food'],
+		// classifier_ids: ['food'],
+		threshold: 0.2,
 
 		/* otherwise */
-		// owners: ['me'],
-		threshold: 0.6,
+		owners: ['IBM'],
 	};
 
 	visualRecognition
 		.classify(classifyParams)
 		.then(classifiedImages => {
-			console.log(classifiedImages);
-			const label = JSON.parse(JSON.stringify(classifiedImages)).images[0].classifiers[0].classes[0].class;
-			res.send({ data: label, message: 'successful upload!' });
+			/* send an array */
+			const classLabels = [];
+			const scoreLabels = [];
+			const JSONLabels = JSON.parse(JSON.stringify(classifiedImages)).images[0].classifiers[0].classes;
+			console.log(JSON.parse(JSON.stringify(classifiedImages)).images[0].classifiers[0].classes);
+			for (var i = 0; i < JSONLabels.length; i++) {
+				classLabels.push(JSONLabels[i].class);
+				scoreLabels.push(JSONLabels[i].score);
+			}
+			// console.log(classLabels);
+			// console.log(scoreLabels);
+			res.send({
+				classes: classLabels.toString(),
+				scores: scoreLabels.toString(),
+				message: 'successful upload!',
+			});
 		})
-		// .then(
-		// 	res.status(200).json({
-		// 		message: 'successful upload!',
-		// 	})
-		// )
 		.catch(err => {
 			res.status(400).json({
 				error: err,
@@ -61,24 +69,24 @@ app.post('/api/upload', upload.single('photo'), (req, res, next) => {
 		});
 });
 
-app.post('/api/url', (req, res) => {
-	var url = req.body.url;
-	var classifier_ids = ['food'];
+// app.post('/api/url', (req, res) => {
+// 	var url = req.body.url;
+// 	var classifier_ids = ['food'];
 
-	var params = {
-		url: url,
-		classifier_ids: classifier_ids,
-	};
+// 	var params = {
+// 		url: url,
+// 		classifier_ids: classifier_ids,
+// 	};
 
-	visualRecognition.classify(params, function(err, response) {
-		if (err) console.log(err);
-		else console.log(JSON.stringify(response, null, 2));
-	});
+// 	visualRecognition.classify(params, function(err, response) {
+// 		if (err) console.log(err);
+// 		else console.log(JSON.stringify(response, null, 2));
+// 	});
 
-	res.status(200).json({
-		message: 'successful test fruit url!',
-	});
-});
+// 	res.status(200).json({
+// 		message: 'successful test fruit url!',
+// 	});
+// });
 
 app.listen(3000, () => {
 	console.log('App running on http://localhost:3000');
