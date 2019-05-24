@@ -177,8 +177,9 @@ export default class SearchScreen extends React.Component {
 					//   {' '}
 					// </Text>
 				}
+				<Text> </Text>
 				<Button iconRight block success onPress={this.readThreadUpPage}>
-					<Text>Search for Red Shoes </Text>
+					<Text> Find My Thrifty Inspiration </Text>
 					<Icon name="search" />
 				</Button>
 				{this.renderResults()}
