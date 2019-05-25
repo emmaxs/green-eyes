@@ -14,28 +14,15 @@ Go ahead and play with the app in a simulator!
 ### Current Functionality
 - Upload photo from gallery or camera
 - Submit to Watson Food Recognition Service
-- Extract a Keyword from the results
----
-- Run a search on 'red shoes' display the result
+- Extract a set of search terms from the results
+- Search terms on ThredUp.com
 - Display results as cards
 - Open a link to ThredUp for each item
 
 ### Next Steps
-- Display threshold results of classification
-- UI Changes
-- Add Picker to select attributes of clothing to add to keywords
-
-### Main Steps
-- Query the fashion classifier
-- Make the search keyword match the classifier results
-
-###  UI Changes
-[ ] Add Splash Screen
-[ ] Improve UI
-
-- Improve Spacing between the Views
-- Figure Out what text/instructions to display
-- Possibly put the cards in a deck swiper
+- Add Website Names to the cards
+- Add additional websites to crawl
+- Improve Classifier
 
 ### Should Do
 - Change auth files and urls to a separate .env file
