@@ -53,10 +53,25 @@ export default class SearchScreen extends React.Component {
 		// 	return <Text> No results </Text>;
 		// }
 	};
-
+	buildLinks = async () => {
+		let threadUPbaseURL = 'https://www.thredup.com/products/women?department_tags=women&sort=Relevance&text=';
+		this.setState({ searchTerm: this.props.searchTerms });
+		console.log('PROPS:');
+		console.log(this.props.searchTerms);
+		for (let i = 0; i < this.props.searchTerms.length; i += 1) {
+			if (i === 0) {
+				threadUPbaseURL += this.props.searchTerms[0];
+			} else {
+				threadUPbaseURL += `+${this.props.searchTerms[i]}`;
+			}
+		} // TODO modify this.state here
+		await this.setState({ threadUPLink: threadUPbaseURL });
+		console.log(this.state.threadUPLink);
+		this.readThreadUpPage();
+	};
 	readThreadUpPage = async () => {
 		this.setState({ searchStarted: true });
-		console.log('called the read page method');
+		console.log('called the read page method on' + this.state.threadUPLink);
 		let htmlString = '';
 		const response = await fetch(this.state.threadUPLink)
 			.then(async response => {
@@ -139,17 +154,17 @@ export default class SearchScreen extends React.Component {
 		this.buildSearchResults();
 	};
 
-	buildLinks() {
-		let swapURL = 'https://www.swap.com/shop/?q=';
-		for (let i = 0; i < this.state.searchTerm.length; i++) {
-			if (i === 0) {
-				swapURL += this.state.searchTerm[0];
-			} else {
-				swapURL += `%20${this.state.searchTerm[i]}`;
-			}
-		}
-		console.log(swapURL);
-	}
+	// buildLinks() {
+	// 	let swapURL = 'https://www.swap.com/shop/?q=';
+	// 	for (let i = 0; i < this.state.searchTerm.length; i++) {
+	// 		if (i === 0) {
+	// 			swapURL += this.state.searchTerm[0];
+	// 		} else {
+	// 			swapURL += `%20${this.state.searchTerm[i]}`;
+	// 		}
+	// 	}
+	// 	console.log(swapURL);
+	// }
 
 	buildSearchResults() {
 		const accumulator = [];
@@ -178,7 +193,7 @@ export default class SearchScreen extends React.Component {
 					// </Text>
 				}
 				<Text> </Text>
-				<Button iconRight block success onPress={this.readThreadUpPage}>
+				<Button iconRight block success onPress={this.buildLinks}>
 					<Text> Find My Thrifty Inspiration </Text>
 					<Icon name="search" />
 				</Button>

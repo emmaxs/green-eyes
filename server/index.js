@@ -23,7 +23,7 @@ const upload = multer({ storage: storage });
 // new Visual Recognition service
 var visualRecognition = new VisualRecognitionV3({
 	version: '2018-03-19',
-	iam_apikey: 'g6MjJJPhgOv5oZ5cIN_bK4yKBGwOq-tuaNtrsYcA7Egh',
+	iam_apikey: 'm7cuCDiM9-JHTm085qiIZ3h8rvbGU5lFtr-VCydQDyi7',
 });
 
 app.get('/', (req, res) => {
@@ -38,7 +38,7 @@ app.post('/api/upload', upload.single('photo'), (req, res, next) => {
 		threshold: 0.2,
 
 		/* otherwise */
-		owners: ['IBM'],
+		owners: ['me'],
 	};
 
 	visualRecognition
@@ -49,7 +49,11 @@ app.post('/api/upload', upload.single('photo'), (req, res, next) => {
 			const scoreLabels = [];
 			const JSONLabels = JSON.parse(JSON.stringify(classifiedImages)).images[0].classifiers[0].classes;
 			console.log(JSON.parse(JSON.stringify(classifiedImages)).images[0].classifiers[0].classes);
-			for (var i = 0; i < JSONLabels.length; i++) {
+			var length = 3;
+			if (JSONLabels.length < 3) {
+				length = JSONLabels.length;
+			}
+			for (var i = 0; i < length; i++) {
 				classLabels.push(JSONLabels[i].class);
 				scoreLabels.push(JSONLabels[i].score);
 			}

@@ -54,7 +54,7 @@ export default class App extends React.Component {
 
 	handleUpload = () => {
 		this.setState({ classifyingImage: true, classificationComplete: false });
-		fetch('http://localhost:3000/api/upload', {
+		fetch('http://10.31.39.208:3000/api/upload', {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',
