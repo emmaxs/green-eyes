@@ -10,8 +10,8 @@ export default class SearchScreen extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			searchTerm: ['red', 'shoes'],
-			threadUPLink: 'https://www.thredup.com/products/women?department_tags=women&sort=Relevance&text=red+shoes',
+			searchTerm: [],
+			threadUPLink: '',
 			resultItems: [],
 			name_list: [],
 			price_list: [],
@@ -54,20 +54,24 @@ export default class SearchScreen extends React.Component {
 		// }
 	};
 	buildLinks = async () => {
-		let threadUPbaseURL = 'https://www.thredup.com/products/women?department_tags=women&sort=Relevance&text=';
-		this.setState({ searchTerm: this.props.searchTerms });
-		console.log('PROPS:');
-		console.log(this.props.searchTerms);
-		for (let i = 0; i < this.props.searchTerms.length; i += 1) {
-			if (i === 0) {
-				threadUPbaseURL += this.props.searchTerms[0];
-			} else {
-				threadUPbaseURL += `+${this.props.searchTerms[i]}`;
-			}
-		} // TODO modify this.state here
-		await this.setState({ threadUPLink: threadUPbaseURL });
-		console.log(this.state.threadUPLink);
-		this.readThreadUpPage();
+		if (this.props.searchTerms === null) {
+			alert('Please upload a photo first');
+		} else {
+			let threadUPbaseURL = 'https://www.thredup.com/products/women?department_tags=women&sort=Relevance&text=';
+			this.setState({ searchTerm: this.props.searchTerms });
+			console.log('PROPS:');
+			console.log(this.props.searchTerms);
+			for (let i = 0; i < this.props.searchTerms.length; i += 1) {
+				if (i === 0) {
+					threadUPbaseURL += this.props.searchTerms[0];
+				} else {
+					threadUPbaseURL += `+${this.props.searchTerms[i]}`;
+				}
+			} // TODO modify this.state here
+			await this.setState({ threadUPLink: threadUPbaseURL });
+			console.log(this.state.threadUPLink);
+			this.readThreadUpPage();
+		}
 	};
 	readThreadUpPage = async () => {
 		this.setState({ searchStarted: true });

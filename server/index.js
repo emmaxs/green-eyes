@@ -20,6 +20,21 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
+// establishes colors
+const colors = new Set([
+	'red',
+	'yellow',
+	'orange',
+	'green',
+	'blue',
+	'gray',
+	'black',
+	'brown',
+	'purple',
+	'white',
+	'beige',
+]);
+
 // new Visual Recognition service
 var visualRecognition = new VisualRecognitionV3({
 	version: '2018-03-19',
@@ -49,19 +64,30 @@ app.post('/api/upload', upload.single('photo'), (req, res, next) => {
 			const scoreLabels = [];
 			const JSONLabels = JSON.parse(JSON.stringify(classifiedImages)).images[0].classifiers[0].classes;
 			console.log(JSON.parse(JSON.stringify(classifiedImages)).images[0].classifiers[0].classes);
-			var length = 3;
-			if (JSONLabels.length < 3) {
-				length = JSONLabels.length;
+			var needColor = true;
+			var sortingArray = [];
+			for (var i = 0; i < JSONLabels.length; i++) {
+				sortingArray.push([JSONLabels[i].class, JSONLabels[i].score]);
 			}
-			for (var i = 0; i < length; i++) {
-				classLabels.push(JSONLabels[i].class);
-				scoreLabels.push(JSONLabels[i].score);
+			sortingArray.sort(function(a, b) {
+				return b[1] - a[1];
+			});
+			for (var i = 0; i < sortingArray.length; i++) {
+				if (colors.has(sortingArray[i][0])) {
+					if (needColor) {
+						needColor = false;
+						classLabels.push(sortingArray[i][0]);
+						scoreLabels.push(sortingArray[i][1]);
+					}
+				} else {
+					classLabels.push(sortingArray[i][0]);
+					scoreLabels.push(sortingArray[i][1]);
+				}
 			}
-			// console.log(classLabels);
-			// console.log(scoreLabels);
+			console.log(sortingArray);
 			res.send({
-				classes: classLabels.toString(),
-				scores: scoreLabels.toString(),
+				classes: classLabels.slice(0, 2).toString(),
+				scores: scoreLabels.slice(0, 2).toString(),
 				message: 'successful upload!',
 			});
 		})
