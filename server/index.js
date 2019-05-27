@@ -35,10 +35,10 @@ const colors = new Set([
 	'beige',
 ]);
 
-// new Visual Recognition service
+// new Visual Recognition service, change API key with new models
 var visualRecognition = new VisualRecognitionV3({
 	version: '2018-03-19',
-	iam_apikey: 'm7cuCDiM9-JHTm085qiIZ3h8rvbGU5lFtr-VCydQDyi7',
+	iam_apikey: 'zxF3a_QZj68DHe_xerqT6N4keCm0z4sBiZyPiQgQYWU2',
 });
 
 app.get('/', (req, res) => {
@@ -50,7 +50,7 @@ app.post('/api/upload', upload.single('photo'), (req, res, next) => {
 		images_file: fs.createReadStream(`${location}/${req.file.filename}`),
 		/* just for food */
 		// classifier_ids: ['food'],
-		threshold: 0.2,
+		threshold: 0.1,
 
 		/* otherwise */
 		owners: ['me'],
@@ -63,7 +63,7 @@ app.post('/api/upload', upload.single('photo'), (req, res, next) => {
 			const classLabels = [];
 			const scoreLabels = [];
 			const JSONLabels = JSON.parse(JSON.stringify(classifiedImages)).images[0].classifiers[0].classes;
-			console.log(JSON.parse(JSON.stringify(classifiedImages)).images[0].classifiers[0].classes);
+			// console.log(JSON.parse(JSON.stringify(classifiedImages)).images[0].classifiers[0].classes);
 			var needColor = true;
 			var sortingArray = [];
 			for (var i = 0; i < JSONLabels.length; i++) {
@@ -80,8 +80,13 @@ app.post('/api/upload', upload.single('photo'), (req, res, next) => {
 						scoreLabels.push(sortingArray[i][1]);
 					}
 				} else {
-					classLabels.push(sortingArray[i][0]);
-					scoreLabels.push(sortingArray[i][1]);
+					if (sortingArray[i][0] === 'tshirt') {
+						classLabels.push('t-shirt');
+						scoreLabels.push(sortingArray[i][1]);
+					} else {
+						classLabels.push(sortingArray[i][0]);
+						scoreLabels.push(sortingArray[i][1]);
+					}
 				}
 			}
 			console.log(sortingArray);
