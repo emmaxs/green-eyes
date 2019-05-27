@@ -15,7 +15,7 @@ Go ahead and play with the app in a simulator!
 
 ### Current Functionality
 - Upload photo from gallery or camera
-- Submit to Watson Food Recognition Service
+- Submit to our trained Watson visual recognition model
 - Extract a set of search terms from the results
 - Search terms on ThredUp.com
 - Display results as cards
