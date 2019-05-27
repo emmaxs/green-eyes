@@ -201,6 +201,7 @@ export default class SearchScreen extends React.Component {
 					<Text> Find My Thrifty Inspiration </Text>
 					<Icon name="search" />
 				</Button>
+
 				{this.renderResults()}
 			</View>
 		);

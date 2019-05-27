@@ -17,6 +17,8 @@ import {
 import { ImagePicker, Permissions } from 'expo';
 import SearchScreen from './SearchScreen';
 
+/* add IP address to get the simulator to work on your computer */
+var IP = 'localhost';
 var BUTTONS = ['Take Photo', 'Upload From Camera Roll', 'Go Back'];
 var CANCEL_INDEX = 2;
 
@@ -30,31 +32,9 @@ export default class App extends React.Component {
 		classificationComplete: false,
 	};
 
-	/* we are currently not using this */
-	// handleURL = () => {
-	// 	fetch('http://localhost:3000/api/url', {
-	// 		method: 'POST',
-	// 		body: JSON.stringify({
-	// 			url: 'https://watson-developer-cloud.github.io/doc-tutorial-downloads/visual-recognition/fruitbowl.jpg',
-	// 		}), // data can be `string` or {object}!
-	// 		headers: {
-	// 			'Content-Type': 'application/json',
-	// 		},
-	// 	})
-	// 		.then(response => response.json())
-	// 		.then(response => {
-	// 			console.log('url submit succes', response);
-	// 			alert('url submit success!');
-	// 		})
-	// 		.catch(error => {
-	// 			console.log('url error', error);
-	// 			alert('Url failed!');
-	// 		});
-	// };
-
 	handleUpload = () => {
 		this.setState({ classifyingImage: true, classificationComplete: false });
-		fetch('http://10.31.39.208:3000/api/upload', {
+		fetch(`http://${IP}:3000/api/upload`, {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',
