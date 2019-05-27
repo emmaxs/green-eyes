@@ -9,7 +9,7 @@ React Native app with Node.js backend to classify photos into outfits and search
 2) In `server/`, run `yarn install` and `node index.js`
 3) In `mobile/`, run `yarn install` and `yarn start` or `expo start` to start expo.
 
-Important Note: To get this app to work on your computer, you will have to replace the server address in the fetch call for handle upload to your unique IP address. If this is your first time running the app, you will also need to make sure you have a `server/images/` directory.
+Important Note: To get this app to work on your computer, you will have to replace `IP` variable in `HomeScreen.js` unique IP address. If this is your first time running the app, you will also need to make sure you have a `server/images/` directory. This is essentially a one screen app, but the major search component is also stored in `screens/SearchScreen.js`.
 
 Go ahead and play with the app in a simulator!
 
