@@ -2,7 +2,7 @@
 CS89 Watson Project Team 4
 
 ### Description
-React Native app with Node.js backend to classify photos into outfits and search thrift shop catalogues. Uses Native Base UI library to style the app.
+React Native app with Node.js backend to classify photos into outfits and search thrift shop catalogues. Uses Native Base UI library to style the app. The git repository is stored [here:](https://github.com/emmaxs/green-eyes)
 
 ### Instructions
 1) Clone the repository
