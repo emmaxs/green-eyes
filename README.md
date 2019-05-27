@@ -9,6 +9,8 @@ React Native app with Node.js backend to classify photos into outfits and search
 2) In `server/`, run `yarn install` and `node index.js`
 3) In `mobile/`, run `yarn install` and `yarn start` or `expo start` to start expo.
 
+Important Note: To get this app to work on your computer, you will have to replace the server address in the fetch call for handle upload to your unique IP address. If this is your first time running the app, you will also need to make sure you have a `server/images/` directory.
+
 Go ahead and play with the app in a simulator!
 
 ### Current Functionality
@@ -20,9 +22,8 @@ Go ahead and play with the app in a simulator!
 - Open a link to ThredUp for each item
 
 ### Next Steps
-- Add Website Names to the cards
+- Add website names to the cards
 - Add additional websites to crawl
-- Improve Classifier
 
 ### Should Do
 - Change auth files and urls to a separate .env file
