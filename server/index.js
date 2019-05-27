@@ -20,10 +20,25 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
+// establishes colors
+const colors = new Set([
+	'red',
+	'yellow',
+	'orange',
+	'green',
+	'blue',
+	'gray',
+	'black',
+	'brown',
+	'purple',
+	'white',
+	'beige',
+]);
+
 // new Visual Recognition service
 var visualRecognition = new VisualRecognitionV3({
 	version: '2018-03-19',
-	iam_apikey: 'g6MjJJPhgOv5oZ5cIN_bK4yKBGwOq-tuaNtrsYcA7Egh',
+	iam_apikey: 'm7cuCDiM9-JHTm085qiIZ3h8rvbGU5lFtr-VCydQDyi7',
 });
 
 app.get('/', (req, res) => {
@@ -38,7 +53,7 @@ app.post('/api/upload', upload.single('photo'), (req, res, next) => {
 		threshold: 0.2,
 
 		/* otherwise */
-		owners: ['IBM'],
+		owners: ['me'],
 	};
 
 	visualRecognition
@@ -49,15 +64,30 @@ app.post('/api/upload', upload.single('photo'), (req, res, next) => {
 			const scoreLabels = [];
 			const JSONLabels = JSON.parse(JSON.stringify(classifiedImages)).images[0].classifiers[0].classes;
 			console.log(JSON.parse(JSON.stringify(classifiedImages)).images[0].classifiers[0].classes);
+			var needColor = true;
+			var sortingArray = [];
 			for (var i = 0; i < JSONLabels.length; i++) {
-				classLabels.push(JSONLabels[i].class);
-				scoreLabels.push(JSONLabels[i].score);
+				sortingArray.push([JSONLabels[i].class, JSONLabels[i].score]);
 			}
-			// console.log(classLabels);
-			// console.log(scoreLabels);
+			sortingArray.sort(function(a, b) {
+				return b[1] - a[1];
+			});
+			for (var i = 0; i < sortingArray.length; i++) {
+				if (colors.has(sortingArray[i][0])) {
+					if (needColor) {
+						needColor = false;
+						classLabels.push(sortingArray[i][0]);
+						scoreLabels.push(sortingArray[i][1]);
+					}
+				} else {
+					classLabels.push(sortingArray[i][0]);
+					scoreLabels.push(sortingArray[i][1]);
+				}
+			}
+			console.log(sortingArray);
 			res.send({
-				classes: classLabels.toString(),
-				scores: scoreLabels.toString(),
+				classes: classLabels.slice(0, 2).toString(),
+				scores: scoreLabels.slice(0, 2).toString(),
 				message: 'successful upload!',
 			});
 		})
