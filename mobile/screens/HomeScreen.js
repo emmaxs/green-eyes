@@ -18,7 +18,7 @@ import { ImagePicker, Permissions } from 'expo';
 import SearchScreen from './SearchScreen';
 
 /* add IP address to get the simulator to work on your computer */
-var IP = 'localhost';
+var IP = '10.31.37.236';
 var BUTTONS = ['Take Photo', 'Upload From Camera Roll', 'Go Back'];
 var CANCEL_INDEX = 2;
 
@@ -154,6 +154,7 @@ export default class App extends React.Component {
 							{this.state.classes && this.state.classificationComplete && (
 								<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 									<Text> </Text>
+									{/* <Text> Ready to search! </Text> */}
 									<Text>We have found {this.state.searchTerms.join(', ')} in this picture.</Text>
 								</View>
 							)}
